@@ -1,0 +1,14 @@
+/node_modules
+.env.local
+
+# Ignore system files and folders
+$RECYCLE.BIN/
+System Volume Information/
+
+# Ignore unrelated folders or files
+../FIT/
+../AnotherProject/
+
+# Ignore node_modules and other temporary folders
+node_modules/
+.env
