@@ -45,12 +45,13 @@ function HomePage() {
           </tr>
         </thead>
         <tbody>
-          {data.map((student, index) => (
+          {data.map((customer, index) => (
             <tr key={index}>
-              <th scope="row" className="me-3 ms-3">{student.STUDENT_ID}</th>
-              <td className="ms-3 me-3">{student.STUDENT_NAME}</td>
-              <td className="ms-3 me-3">{student.STUDENT_EMAIL}</td>
+              <th scope="row" className="me-3 ms-3">{customer.CUSTOMER_ID}</th>
+              <td className="ms-3 me-3">{customer.CUSTOMER_NAME}</td>
+              <td className="ms-3 me-3">{customer.CUSTOMER_EMAIL}</td>
               <td colSpan='2'>
+               <Link to={`/read/${customer.CUSTOMER_ID}`} className="btn btn-outline-primary ms-2 me-2">Read</Link>
                <button className="btn btn-outline-info ms-2 me-2">Update</button>
                 <button className="btn btn-outline-warning">Delete</button>
               </td>

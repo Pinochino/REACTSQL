@@ -15,15 +15,15 @@ const db = mysql2.createConnection({
 })
 
 app.get('/', (req, res) => {
-    const sql = `SELECT * FROM STUDENT`;
+    const sql = `SELECT * FROM Customer`;
     db.query(sql, (err, result) => {
         if (err) return res.json({ Message: 'Error inside server' });
         return res.json(result);
     })
 })
 
-app.post('/student', (req, res) => {
-    const sql = 'INSERT INTO student (`STUDENT_NAME`, `STUDENT_EMAIL`) VALUES (?, ?)';
+app.post('/customer', (req, res) => {
+    const sql = 'INSERT INTO customer (`CUSTOMER_NAME`, `CUSTOMER_EMAIL`) VALUES (?, ?)';
     const values = [
         req.body.name,
         req.body.email
@@ -34,11 +34,21 @@ app.post('/student', (req, res) => {
     })
 })
 
-app.put('/student/:id', (req, res) => {
+app.get('/read/:id', (req, res) => {
+    const sql = `SELECT * FROM student WHERE CUSTOMER_ID = ?`;
+    const id = req.params.id;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.json({ Message: 'Error inside server' });
+        return res.json(result);
+    })
+});
+
+app.put('/customer/:id', (req, res) => {
     const sql = ``;
 })
 
-app.delete('/student/:id', (req, res) => {
+app.delete('/customer/:id', (req, res) => {
     const sql = ``;
 })
 
