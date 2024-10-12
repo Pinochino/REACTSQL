@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import axios from "axios";
+import {Link} from 'react-router-dom';
 
 function HomePage() {
   const [data, setData] = useState([]);
@@ -30,7 +31,11 @@ function HomePage() {
 
   return (
     <div>
-      <table class="table">
+      <h2>Student List</h2>
+      <div className="d-flex justify-content-end">
+        <Link to="/create" className="btn btn-success">Create </Link>
+      </div>
+      <table className="table">
         <thead>
           <tr>
             <th scope="col" className="me-3 ms-3">ID</th>
@@ -45,10 +50,10 @@ function HomePage() {
               <th scope="row" className="me-3 ms-3">{student.STUDENT_ID}</th>
               <td className="ms-3 me-3">{student.STUDENT_NAME}</td>
               <td className="ms-3 me-3">{student.STUDENT_EMAIL}</td>
-              <tr colspan='2'>
-                <td><button className="btn btn-outline-info">Update</button></td>
-                <td><button className="btn btn-outline-warning">Delete</button></td>
-              </tr>
+              <td colSpan='2'>
+               <button className="btn btn-outline-info ms-2 me-2">Update</button>
+                <button className="btn btn-outline-warning">Delete</button>
+              </td>
             </tr>
            
           ))}
