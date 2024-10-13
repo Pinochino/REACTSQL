@@ -22,7 +22,7 @@ class ProductController {
       let db;
       try {
          db = await connectDb(); // Get the database connection
-         const id = req.params.id || req.body.id;
+         const id = req.params.id;
 
          if (!id) {
             return res.status(400).json({ error: 'Product ID is required' });
@@ -47,13 +47,6 @@ class ProductController {
          const productId = uuidv4();
          const sql = 'INSERT INTO product (`PRODUCT_ID`,`PRODUCT_IMAGE`,`PRODUCT_NAME`, `PRODUCT_DESCRIPTION`, `PRICE`) VALUES (?, ?, ?, ?, ?)';
 
-         console.log(req.body);
-         console.log(req.body.image); // Kiểm tra xem trường này có đúng không
-         console.log(req.body.name);  // Kiểm tra trường này
-         console.log(req.body.description); // Kiểm tra trường này
-         console.log(req.body.price); // Kiểm tra trường này
-
-
          const values = [
             productId,
             req.body.image,
@@ -73,12 +66,61 @@ class ProductController {
       }
    }
 
-   update(req, res, next) {
+   async update(req, res) {
+      let db;
+      try {
+         db = await connectDb();
+         const id = req.params.id;
+         const sql = 'UPDATE product SET `PRODUCT_NAME`=?, `PRODUCT_DESCRIPTION`=?, `PRODUCT_IMAGE`=?, `PRICE`=? WHERE PRODUCT_ID=?'
+         if (!id) {
+            return res.status(400).json({ error: 'Product ID is required' });
+         }
 
+         const values = [
+            req.body.name,
+            req.body.description,
+            req.body.image,
+            req.body.price,
+            id
+         ]
+
+         const [result] = await db.query(sql, values);
+
+         if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Product not found or no changes made' });
+         }
+         res.json({ message: 'Update product successfully' });
+      } catch (error) {
+         res.status(500).json({ error: 'Internal Server Error' });
+      } finally {
+         if (db) {
+            await db.end();
+         }
+      }
    }
 
-   delete(req, res, next) {
+   async delete(req, res) {
+      let db;
+      try {
+         db = await connectDb();
+         const sql = `DELETE FROM product WHERE PRODUCT_ID=?`;
+         const id = req.params.id;
+         if (!id) {
+            return res.status(400).json({ error: 'Product ID is required' });
+         }
 
+         const [result] = await db.query(sql, id);
+         if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Product not found or no changes made' });
+         }
+         res.json({ message: 'Delete product successfully' });
+      } catch (error) {
+         res.status(500).json({ error: 'Internal Server Error' });
+      } finally {
+         if (db) {
+            await db.end();
+         }
+      }
    }
 }
 

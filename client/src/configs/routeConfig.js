@@ -1,5 +1,6 @@
 export const routeConfigs = {
     home: '/',
-    register: '/create',
+    createProduct: '/create',
     product: '/read/:id',
+    editProduct: '/update/:id',
 }

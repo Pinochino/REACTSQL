@@ -21,6 +21,19 @@ function HomePage() {
       });
   }, []);
 
+
+
+  const handleDelete = (id) => {
+    axios.delete(`http://localhost:8000/delete/` + id)
+    .then(res => {
+      setData(prevData => prevData.filter(item => item.PRODUCT_ID !== id))
+    })
+    .catch(err => {
+      setLoading(false)
+      setError(err)
+    })
+  }
+
   if (loading) {
     return <h1>This website have been loading</h1>;
   }
@@ -54,8 +67,8 @@ function HomePage() {
               <td className="ms-3 me-3">{product.PRICE}</td>
               <td colSpan='3' className="d-flex justify-content-between align-content-center">
                <Link to={`/read/${product.PRODUCT_ID}`} className="btn btn-outline-primary ms-2 me-2">Read</Link>
-               <button className="btn btn-outline-info ms-2 me-2">Update</button>
-                <button className="btn btn-outline-warning">Delete</button>
+               <Link to={`/update/${product.PRODUCT_ID}`} className="btn btn-outline-info ms-2 me-2">Update</Link>
+                <button onClick={() => handleDelete(product.PRODUCT_ID)} className="btn btn-outline-warning">Delete</button>
               </td>
             </tr>
            

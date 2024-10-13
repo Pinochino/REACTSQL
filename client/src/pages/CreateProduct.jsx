@@ -14,14 +14,23 @@ const navigate = useNavigate();
 const handleSubmit = (e) => {
   e.preventDefault();
   axios
-    .post("http://localhost:8000/product", values)
+    .post("http://localhost:8000/create", values)
     .then((res) => {
       console.log(res);
+      setValues(res.data)
       navigate("/");
     })
     .catch((err) => console.log(err));
 };
 
+const displaySelectedImage = (e) => {
+  const file = e.target.files[0];
+
+  if (file) {
+    const imageUrl = URL.createObjectURL(file);
+    document.getElementById('selectedAvatar').src = imageUrl;
+  }
+}
 
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
@@ -32,16 +41,19 @@ const handleSubmit = (e) => {
             <img id="selectedAvatar" src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
               className="rounded-circle" style={{width: '200px', height: '200px',  objectFit: 'cover'}} alt="example placeholder" />
           </div>
-          <div class="d-flex justify-content-center">
+          <div className="d-flex justify-content-center">
             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
-              <label class="form-label text-white m-1" for="customFile2">Choose file</label>
-              <input type="file" class="form-control d-none" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" 
-              onChange={(e) => setValues({ ...values, image: e.target.value })}
+              <label className="form-label text-white m-1" htmlFor="customFile2">Choose file</label>
+              <input type="file" className="form-control d-none" id="customFile2" 
+              onChange={(e) => {
+                 setValues({ ...values, image: e.target.value });
+                 displaySelectedImage(e);
+              }}
                />
             </div>
           </div>
       <div className="mb-2">
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">Name of product</label>
         <input
           type="text"
           placeholder="Enter name..."
@@ -50,7 +62,7 @@ const handleSubmit = (e) => {
         ></input>
       </div>
       <div className="mb-2">
-        <label htmlFor="description">Description</label>
+        <label htmlFor="description">Description of product</label>
         <textarea
           placeholder="Enter description..."
           className="form-control"
@@ -59,7 +71,7 @@ const handleSubmit = (e) => {
         ></textarea>
       </div>
       <div className="mb-2">
-        <label htmlFor="price">Price</label>
+        <label htmlFor="price">Price of product</label>
         <input
           type="number"
           placeholder="Enter price..."

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDb from "./config/db/index.js";
 import route from "./routes/index.js";
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 

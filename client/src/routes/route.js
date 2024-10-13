@@ -1,7 +1,8 @@
 import { routeConfigs } from "../configs/routeConfig";
+import CreateProduct from "../pages/CreateProduct";
 import HomePage from "../pages/HomePage";
 import ProductDetail from "../pages/ProductDetail";
-import Register from "../pages/Register";
+import UpdateProduct from "../pages/UpdateProduct";
 import UserDetail from "../pages/UserDetail";
 
 const publicRoute = [
@@ -10,9 +11,8 @@ const publicRoute = [
         component: HomePage
     },
     {
-        path: routeConfigs.register,
-        component: Register,
-        layout: null
+        path: routeConfigs.createProduct,
+        component: CreateProduct,
     },
     {
         path: routeConfigs.userdetail,
@@ -22,6 +22,11 @@ const publicRoute = [
     {
         path: routeConfigs.product,
         component: ProductDetail,
+        layout: null
+    },
+    {
+        path: routeConfigs.editProduct,
+        component: UpdateProduct,
         layout: null
     },
 
