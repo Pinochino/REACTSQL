@@ -1,7 +1,7 @@
 import { Footer, Header, Pagination } from "../components";
 
 function DefaultLayout({ children }) {
-    return (<div className="container">
+    return (<div className="container-fluid">
         <Header />
         <div>{children}</div>
         <Pagination />

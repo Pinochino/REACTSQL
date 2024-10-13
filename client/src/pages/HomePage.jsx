@@ -31,27 +31,29 @@ function HomePage() {
 
   return (
     <div>
-      <h2>Student List</h2>
+      <h2 className="text-center">Student List</h2>
       <div className="d-flex justify-content-end">
         <Link to="/create" className="btn btn-success">Create </Link>
       </div>
       <table className="table">
         <thead>
           <tr>
-            <th scope="col" className="me-3 ms-3">ID</th>
-            <th scope="col" className="me-3 ms-3">Name</th>
-            <th scope="col" className="me-3 ms-3">Email</th>
-            <th scope="col" className="me-3 ms-3" >Action</th>
+            <th scope="col" className="me-3">ID</th>
+            <th scope="col" className="me-3">Name</th>
+            <th scope="col" className="me-3">Description</th>
+            <th scope="col" className="me-3">Price</th>
+            <th scope="col" className="me-3" colSpan='2'>Action</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((customer, index) => (
+          {data.map((product, index) => (
             <tr key={index}>
-              <th scope="row" className="me-3 ms-3">{customer.CUSTOMER_ID}</th>
-              <td className="ms-3 me-3">{customer.CUSTOMER_NAME}</td>
-              <td className="ms-3 me-3">{customer.CUSTOMER_EMAIL}</td>
-              <td colSpan='2'>
-               <Link to={`/read/${customer.CUSTOMER_ID}`} className="btn btn-outline-primary ms-2 me-2">Read</Link>
+              <th scope="row" className="me-3 ms-3">{product.PRODUCT_ID}</th>
+              <td className="ms-3 me-3">{product.PRODUCT_NAME}</td>
+              <td className="ms-3 me-3">{product.PRODUCT_DESCRIPTION}</td>
+              <td className="ms-3 me-3">{product.PRICE}</td>
+              <td colSpan='3' className="d-flex justify-content-between align-content-center">
+               <Link to={`/read/${product.PRODUCT_ID}`} className="btn btn-outline-primary ms-2 me-2">Read</Link>
                <button className="btn btn-outline-info ms-2 me-2">Update</button>
                 <button className="btn btn-outline-warning">Delete</button>
               </td>

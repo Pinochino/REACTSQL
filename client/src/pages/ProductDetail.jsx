@@ -1,9 +1,40 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 function ProductDetail() {
+
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const API = `http://localhost:8000/read/${id}`;
+    axios.get(API)
+      .then(res => {
+        console.log(res)
+        setProduct(res.data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err)
+        setLoading(false)
+      })
+  }, [id])
+
+  if (loading) {
+    return (<h1>This website have been loading</h1>)
+  }
+
+  if (error) {
+    return (<h1>This website have {error}</h1>)
+  }
+
   return (
     <div>
-      <section style={{ backgroundColor: "#eee" }}>
+      {product ? ( <section style={{ backgroundColor: "#eee" }}>
         <div className="container py-5">
           <div className="row justify-content-center">
             <div className="col-md-8 col-lg-6 col-xl-4">
@@ -13,7 +44,7 @@ function ProductDetail() {
                   data-mdb-ripple-color="light"
                 >
                   <img
-                    src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/12.webp"
+                    src={product.PRODUCT_IMAGE}
                     style={{
                       borderTopLeftRadius: "15px",
                       borderTopRightRadius: "15px",
@@ -30,10 +61,10 @@ function ProductDetail() {
                     <div>
                       <p>
                         <Link to="#!" className="text-dark">
-                          Dell Xtreme 270
+                          {product.PRODUCT_NAME}
                         </Link>
                       </p>
-                      <p className="small text-muted">Laptops</p>
+                      <p className="small text-muted">{product.PRODUCT_DESCRIPTION}</p>
                     </div>
                     <div>
                       <div className="d-flex flex-row justify-content-end mt-1 mb-4 text-danger">
@@ -51,7 +82,7 @@ function ProductDetail() {
                   <div className="d-flex justify-content-between">
                     <p>
                       <Link to="#!" className="text-dark">
-                        $3,999
+                        {product.PRICE} $
                       </Link>
                     </p>
                     <p className="text-dark">#### 8787</p>
@@ -78,7 +109,7 @@ function ProductDetail() {
             </div>
           </div>
         </div>
-      </section>
+      </section>) : (<h3>Not found product</h3>)}
     </div>
   );
 }

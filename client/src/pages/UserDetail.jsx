@@ -6,12 +6,13 @@ function UserDetail() {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [customer, setCustomer] = useState('');
+    const [customer, setCustomer] = useState(null);
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/read/${id}`)
+        axios.get(`http://localhost:8000/customer/read/${id}`)
             .then(res => {
+                console.log(res)
                 setCustomer(res.data[0]);
                 setLoading(false);
             })

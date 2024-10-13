@@ -1,62 +1,50 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mysql2 from 'mysql2';
-import cors from 'cors';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDb from "./config/db/index.js";
+import route from "./routes/index.js";
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const db = mysql2.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'REACTSQL'
-})
+// connect database
+connectDb(app)
 
-app.get('/', (req, res) => {
-    const sql = `SELECT * FROM Customer`;
-    db.query(sql, (err, result) => {
-        if (err) return res.json({ Message: 'Error inside server' });
-        return res.json(result);
-    })
-})
+const port = process.env.PORT || 8000;
 
-app.post('/customer', (req, res) => {
-    const sql = 'INSERT INTO customer (`CUSTOMER_NAME`, `CUSTOMER_EMAIL`) VALUES (?, ?)';
-    const values = [
-        req.body.name,
-        req.body.email
-    ]
-    db.query(sql, values, (err, result) => {
-        if (err) return res.json(err);
-        return res.json(result);
-    })
-})
+// routes
+route(app);
 
-app.get('/read/:id', (req, res) => {
-    const sql = `SELECT * FROM student WHERE CUSTOMER_ID = ?`;
-    const id = req.params.id;
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received.');
+    console.log('Closing HTTP server and stop receiving requests...');
 
-    db.query(sql, [id], (err, result) => {
-        if (err) return res.json({ Message: 'Error inside server' });
-        return res.json(result);
-    })
+    server.close(() => {
+        console.log('HTTP server closed.');
+
+        if (db) {
+            console.log('Closing DB connection...');
+            db.end((err) => {
+                if (err) {
+                    console.error('Error closing the DB connection:', err);
+                } else {
+                    console.log('DB connection has been closed.');
+                }
+                // Exit the process
+                console.log("Goodbye!");
+                process.exit(0);
+            });
+        } else {
+            // Nếu không có kết nối DB
+            console.log("No DB connection to close. Goodbye!");
+            process.exit(0);
+        }
+    });
 });
 
-app.put('/customer/:id', (req, res) => {
-    const sql = ``;
-})
-
-app.delete('/customer/:id', (req, res) => {
-    const sql = ``;
-})
-
-dotenv.config();
-const port = process.env.PORT | 8000;
-app.listen(port, () => console.log(`App is listerning on http://localhost:${port}`));
-
-
-
-
-
+app.listen(port, () =>
+    console.log(`App is listerning on http://localhost:${port}`)
+);

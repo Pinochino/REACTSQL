@@ -28,9 +28,9 @@ function Register() {
       <div className="w-50 bg-white rounded p-3">
         <form method="post" onSubmit={handleSubmit}>
           <h2 className="text-center">Register</h2>
-          <div className="mb-2">
+          <div className="mb-4 d-flex justify-content-center">
             <img id="selectedAvatar" src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
-              class="rounded-circle" style={{width: '200px', height: '200px',  objectFit: 'cover'}} alt="example placeholder" />
+              className="rounded-circle" style={{width: '200px', height: '200px',  objectFit: 'cover'}} alt="example placeholder" />
           </div>
           <div class="d-flex justify-content-center">
             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">

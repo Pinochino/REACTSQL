@@ -6,7 +6,7 @@ function Header() {
             <div className="container" bis_skin_checked="1">
                 <div className="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start" bis_skin_checked="1">
                     <Link to="/" className="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-                        <svg className="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:to="#bootstrap"></use></svg>
+                        <svg className="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"></svg>
                     </Link>
 
                     <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">

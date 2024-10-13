@@ -1,6 +1,5 @@
 export const routeConfigs = {
     home: '/',
     register: '/create',
-    userdetail: '/read/:id',
-    
+    product: '/read/:id',
 }
