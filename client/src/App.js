@@ -1,21 +1,41 @@
-import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import UserDetail from './pages/UserDetail';
-import Register from './pages/Register';
-
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { publicRoute } from "./routes/route";
+import { DefaultLayout } from "./layouts";
+import { Fragment } from "react";
 
 function App() {
-
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/create' element={<Register />}></Route>
-        <Route path='/read/:id' element={<UserDetail />}></Route>
-      </Routes>
+      <div className="app">
+        <Routes>
+          {publicRoute.map((route, index) => {
+            let Layout = DefaultLayout;
+
+            if (route.layout) {
+              Layout = route.layout;
+            } else if (route.layout === null) {
+              Layout = Fragment;
+            }
+
+            const Page = route.component;
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            )
+
+          })}
+        </Routes>
+      </div>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
