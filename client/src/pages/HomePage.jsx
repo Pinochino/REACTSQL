@@ -44,7 +44,7 @@ function HomePage() {
 
   return (
     <div>
-      <h2 className="text-center">Student List</h2>
+      <h2 className="text-center">Product Table</h2>
       <div className="d-flex justify-content-end">
         <Link to="/create" className="btn btn-success">Create </Link>
       </div>

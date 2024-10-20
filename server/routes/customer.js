@@ -4,8 +4,9 @@ const route = Router();
 const customerController = new CustomerController();
 
 route.get('/', customerController.index.bind(customerController));
-route.post('/', customerController.create);
-route.put('/create/:id', customerController.update);
+route.post('/create', customerController.create);
+route.post('/login', customerController.check);
+route.put('/update/:id', customerController.update);
 route.delete('/delete/:id', customerController.delete);
 
 export default route;

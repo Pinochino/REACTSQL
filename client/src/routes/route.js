@@ -1,14 +1,17 @@
 import { routeConfigs } from "../configs/routeConfig";
 import CreateProduct from "../pages/CreateProduct";
 import HomePage from "../pages/HomePage";
+import ListProduct from "../pages/ListProduct";
+import Login from "../pages/Login";
 import ProductDetail from "../pages/ProductDetail";
+import Register from "../pages/Register";
 import UpdateProduct from "../pages/UpdateProduct";
 import UserDetail from "../pages/UserDetail";
 
 const publicRoute = [
     {
         path: routeConfigs.home,
-        component: HomePage
+        component: HomePage,
     },
     {
         path: routeConfigs.createProduct,
@@ -17,21 +20,34 @@ const publicRoute = [
     {
         path: routeConfigs.userdetail,
         component: UserDetail,
-        layout: null
+        layout: null,
     },
     {
-        path: routeConfigs.product,
+        path: routeConfigs.productById,
         component: ProductDetail,
-        layout: null
+        layout: null,
     },
     {
         path: routeConfigs.editProduct,
         component: UpdateProduct,
-        layout: null
+        layout: null,
     },
-
-
-]
+    {
+        path: routeConfigs.login,
+        component: Login,
+        layout: null,
+    },
+    {
+        path: routeConfigs.register,
+        component: Register,
+        layout: null,
+    },
+    {
+        path: routeConfigs.listProduct,
+        component: ListProduct,
+        layout: null,
+    },
+];
 
 const privateRoute = [];
 

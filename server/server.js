@@ -1,15 +1,21 @@
+dotenv.config();
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDb from "./config/db/index.js";
 import route from "./routes/index.js";
 import jwt from 'jsonwebtoken';
+import multer from 'multer';
 
-dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(multer().none());
 
 // connect database
 connectDb(app)

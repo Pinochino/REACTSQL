@@ -10,7 +10,7 @@ class ProductController {
          const [rows] = await db.query('SELECT * FROM product'); // Example query
          res.json(rows);
       } catch (error) {
-         res.status(500).json({ error: 'Internal Server Error' });
+         res.status(500).json({ message: `${error}` });
       } finally {
          if (db) {
             await db.end(); // Close the connection if it was established
