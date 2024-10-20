@@ -4,15 +4,21 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDb from "./config/db/index.js";
 import route from "./routes/index.js";
-import jwt from 'jsonwebtoken';
 import multer from 'multer';
+import bodyParser from "body-parser";
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// body-parser
+const jsonParser = bodyParser.json()
+const urlencodedParser = bodyParser.urlencoded({ extended: true })
+app.use(jsonParser)
+app.use(urlencodedParser)
 
+// multer
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(multer().none());

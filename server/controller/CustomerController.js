@@ -67,13 +67,13 @@ class CustomerController {
         try {
             const sql = `SELECT DELETED_AT FROM Customer WHERE CUSTOMER_ID=?`;
             db = await connectDb();
-            const [rows] = await db.query(sql, id);
+            const [rows] = await db.query(sql, [id]);
 
             if (rows[0].DELETED_AT === null) {
                 return res.json({ message: 'Customer is not deleted' });
             }
             const text = `UPDATE CUSTOMER SET DELETED_AT = NULL WHERE CUSTOMER_ID=?`;
-            const [data] = await db.query(text, id);
+            const [data] = await db.query(text, [id]);
             if (data.affectedRows > 0) {
                 return res.json({ message: `Restore successfully` });
             }
