@@ -45,7 +45,10 @@ class CustomerController {
             try {
                 db = await connectDb();
                 const [rows] = await db.query(sql, values);
-                res.json(rows)
+                if (rows.affectedRows) {
+                    return res.json({ message: `Create user successfuly`, data: rows })
+                }
+                return res.status(400).send({ message: 'Fail to create user' })
             } catch (error) {
                 res.status(500).json({ message: `${error}` })
             } finally {
@@ -58,12 +61,52 @@ class CustomerController {
         }
     }
 
-    update(req, res, next) {
-        const sql = `UPDATE Customer SET AVATAR=?, CUSTOMER_NAME=?, CUSTOMER_EMAIL=?, CUSTOMER_PASSWORD=?`
+    async update(req, res) {
+        let db;
+        const { id } = req.params;
+        const { avatar, name, email, password } = req.body;
+        try {
+            const sql = `UPDATE Customer SET CUSTOMER_NAME = ?,  CUSTOMER_EMAIL = ?, CUSTOMER_PASSWORD = ?, AVATAR = ? WHERE CUSTOMER_ID = ?`;
+            const values = [
+                name,
+                email,
+                password,
+                avatar,
+                id
+            ]
+            db = await connectDb();
+            const [rows] = await db.query(sql, values);
+            if (rows.affectedRows > 0) {
+                return res.json({ message: `Update customer successfully` })
+            }
+            return res.status(400).json({ message: `Update customer fail` })
+        } catch (error) {
+            res.status(500).json({ message: `${error}` })
+        } finally {
+            if (db) {
+                await db.end();
+            }
+        }
     }
 
-    delete(req, res, next) {
-
+    async delete(req, res) {
+        let db;
+        const { id } = req.params;
+        try {
+            const sql = `DELETE FROM Customer WHERE CUSTOMER_ID=?`
+            db = await connectDb();
+            const [rows] = await db.query(sql, id);
+            if (rows.affectedRows) {
+                return res.json({ message: `Delete successfully ${id}` })
+            }
+            return res.status(400).json({ message: `Fail to delete user id: ${id}` })
+        } catch (error) {
+            return res.status(500).json({ message: `${error}` })
+        } finally {
+            if (db) {
+                await db.end();
+            }
+        }
     }
 
     async check(req, res) {
@@ -75,22 +118,19 @@ class CustomerController {
 
         let db;
         try {
-            // mã hóa mật khẩu
-            const salt = await bcrypt.genSalt(saltRounds);
-            const encryptedPassword = await bcrypt.hash(password, salt);
-
             const values = [
                 email,
-                encryptedPassword
-            ]
-
-            const sql = `SELECT CUSTOMER_EMAIL, CUSTOMER_PASSWORD FROM Customer`;
+                password
+            ];
+            const sql = `SELECT CUSTOMER_EMAIL, CUSTOMER_PASSWORD FROM Customer WHERE CUSTOMER_EMAIL=?`;
             db = await connectDb();
             const [rows] = await db.query(sql, values);
-            if (email === rows.CUSTOMER_EMAIL && password === CUSTOMER_PASSWORD) {
-                res.json({ message: 'Login successfully' })
+            console.log(rows[0].CUSTOMER_PASSWORD);
+            const check = await bcrypt.compare(password, rows[0].CUSTOMER_PASSWORD)
+            if (check) {
+                return res.json({ message: `Login successfully` })
             }
-
+            return res.json({ message: `Fail to login` })
         } catch (error) {
             res.status(500).send({ message: `${error}` })
         } finally {
@@ -98,8 +138,10 @@ class CustomerController {
                 await db.end();
             }
         }
-
     }
+
+    
+
 
 
 }
