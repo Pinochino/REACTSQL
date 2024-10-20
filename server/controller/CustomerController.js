@@ -61,6 +61,71 @@ class CustomerController {
         }
     }
 
+    async restore(req, res) {
+        let db;
+        const { id } = req.params;
+        try {
+            const sql = `SELECT DELETED_AT FROM Customer WHERE CUSTOMER_ID=?`;
+            db = await connectDb();
+            const [rows] = await db.query(sql, id);
+
+            if (rows[0].DELETED_AT === null) {
+                return res.json({ message: 'Customer is not deleted' });
+            }
+            const text = `UPDATE CUSTOMER SET DELETED_AT = NULL WHERE CUSTOMER_ID=?`;
+            const [data] = await db.query(text, id);
+            if (data.affectedRows > 0) {
+                return res.json({ message: `Restore successfully` });
+            }
+            return res.status(400).json({ message: 'Fail to restore column' })
+        } catch (error) {
+            res.status(500).json({ message: `${error}` })
+        } finally {
+            if (db) {
+                await db.end();
+            }
+        }
+    }
+
+    async deleteSoft(req, res) {
+        let db;
+        const { id } = req.params;
+        try {
+            const sql = `UPDATE Customer SET DELETED_AT = NOW() WHERE CUSTOMER_ID=?`;
+            db = await connectDb();
+            const [rows] = await db.query(sql, [id]);
+            if (rows.affectedRows > 0) {
+                return res.json({ message: `Delete soft successfully` });
+            }
+            return res.status(400).send({ message: 'Fail to add column' })
+        } catch (error) {
+            res.status(500).json({ message: `${error}` })
+        } finally {
+            if (db) {
+                await db.end();
+            }
+        }
+    }
+
+    async countDelete(req, res) {
+        let db;
+        try {
+            db = await connectDb();
+            const sql = `SELECT COUNT(*) FROM Customer WHERE DELETED_AT IS NOT NULL`;
+            const [rows] = await db.query(sql);
+            if (rows.length > 0) {
+                return res.json({ message: `count soft delete successfully is:  ${rows.length}` });
+            }
+            return res.status(400).send({ message: `Fail to count deleted user's account` })
+        } catch (error) {
+            res.status(500).json({ message: `${error}` })
+        } finally {
+            if (db) {
+                await db.end();
+            }
+        }
+    }
+
     async update(req, res) {
         let db;
         const { id } = req.params;
@@ -95,7 +160,7 @@ class CustomerController {
         try {
             const sql = `DELETE FROM Customer WHERE CUSTOMER_ID=?`
             db = await connectDb();
-            const [rows] = await db.query(sql, id);
+            const [rows] = await db.query(sql, [id]);
             if (rows.affectedRows) {
                 return res.json({ message: `Delete successfully ${id}` })
             }
@@ -139,10 +204,6 @@ class CustomerController {
             }
         }
     }
-
-    
-
-
 
 }
 
