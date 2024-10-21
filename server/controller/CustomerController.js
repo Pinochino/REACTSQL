@@ -3,7 +3,9 @@ import bcrypt from 'bcrypt';
 import connectDb from "../config/db/index.js";
 import { v4 as uuidv4 } from 'uuid';
 import { generateJWT, getToken } from '../config/configJWT.js';
-import jwt from 'jsonwebtoken'
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import validateLogin from '../helpers/validate.js';
 
 const saltRounds = 10;
 class CustomerController {
@@ -177,26 +179,26 @@ class CustomerController {
     }
 
     async check(req, res) {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and Password are required' });
-        }
-
-        let db;
         try {
-            const values = [
+            const { email, password } = req.body;
+            const {error} = validateLogin(req.body);
+
+            console.error(`::error validation::`, error);
+            if ( error) {
+                throw createError(error.details[0].message)
+            }
+            let db;
+            const user = [
                 email,
                 password
             ];
             const sql = `SELECT CUSTOMER_EMAIL, CUSTOMER_PASSWORD FROM Customer WHERE CUSTOMER_EMAIL=?`;
             db = await connectDb();
-            const [rows] = await db.query(sql, values);
+            const [rows] = await db.query(sql, user);
             const check = await bcrypt.compare(password, rows[0].CUSTOMER_PASSWORD)
             if (check) {
                 const token = generateJWT({ email: rows[0].CUSTOMER_EMAIL });
-                console.log(token);
-                return res.status(200).json({ message: 'Đăng nhập thành công', token });
+                res.cookie('user', token)
             }
             return res.json({ message: `Fail to login` })
         } catch (error) {

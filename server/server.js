@@ -6,11 +6,33 @@ import connectDb from "./config/db/index.js";
 import route from "./routes/index.js";
 import multer from 'multer';
 import bodyParser from "body-parser";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import Redis from "ioredis";
+import RedisStore from "connect-redis";
+const clientRedis = new Redis(); // default localhost
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// session
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+    secret: 'keyboard cat',
+    store: new RedisStore({client: clientRedis}),
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 5 * 60 * 1000
+    }
+}))
+
+// cookie
+app.use(cookieParser);
 
 // body-parser
 const jsonParser = bodyParser.json()
