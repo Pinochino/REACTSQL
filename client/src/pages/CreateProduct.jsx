@@ -14,7 +14,7 @@ const navigate = useNavigate();
 const handleSubmit = (e) => {
   e.preventDefault();
   axios
-    .post("http://localhost:8000/create", values)
+    .post("http://localhost:8000/product/create", values)
     .then((res) => {
       console.log(res);
       setValues(res.data)

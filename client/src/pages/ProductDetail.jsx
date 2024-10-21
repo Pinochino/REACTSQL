@@ -11,7 +11,7 @@ function ProductDetail() {
   const { id } = useParams();
 
   useEffect(() => {
-    const API = `http://localhost:8000/read/${id}`;
+    const API = `http://localhost:8000/product/read/${id}`;
     axios.get(API)
       .then(res => {
         console.log(res)

@@ -10,7 +10,7 @@ function UserDetail() {
     const { id } = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:8000/customer/read/${id}`)
+        axios.get(`http://localhost:8000/product/customer/read/${id}`)
             .then(res => {
                 console.log(res)
                 setCustomer(res.data[0]);

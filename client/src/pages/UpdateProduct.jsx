@@ -28,7 +28,7 @@ function UpdateProduct() {
     event.preventDefault();
     console.log(values);
     axios
-      .put(`http://localhost:8000/update/${id}`, values)
+      .put(`http://localhost:8000/product/update/${id}`, values)
       .then((res) => {
         console.log(res);
         setValues(res);

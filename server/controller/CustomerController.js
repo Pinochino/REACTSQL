@@ -2,6 +2,8 @@
 import bcrypt from 'bcrypt';
 import connectDb from "../config/db/index.js";
 import { v4 as uuidv4 } from 'uuid';
+import { generateJWT, getToken } from '../config/configJWT.js';
+import jwt from 'jsonwebtoken'
 
 const saltRounds = 10;
 class CustomerController {
@@ -50,7 +52,7 @@ class CustomerController {
                 }
                 return res.status(400).send({ message: 'Fail to create user' })
             } catch (error) {
-                res.status(500).json({ message: `${error}` })
+                return res.status(500).json({ message: `${error}` })
             } finally {
                 if (db) {
                     await db.end();
@@ -190,20 +192,23 @@ class CustomerController {
             const sql = `SELECT CUSTOMER_EMAIL, CUSTOMER_PASSWORD FROM Customer WHERE CUSTOMER_EMAIL=?`;
             db = await connectDb();
             const [rows] = await db.query(sql, values);
-            console.log(rows[0].CUSTOMER_PASSWORD);
             const check = await bcrypt.compare(password, rows[0].CUSTOMER_PASSWORD)
             if (check) {
-                return res.json({ message: `Login successfully` })
+                const token = generateJWT({ email: rows[0].CUSTOMER_EMAIL });
+                console.log(token);
+                return res.status(200).json({ message: 'Đăng nhập thành công', token });
             }
             return res.json({ message: `Fail to login` })
         } catch (error) {
-            res.status(500).send({ message: `${error}` })
+            return res.status(500).send({ message: `${error}` })
         } finally {
             if (db) {
                 await db.end();
             }
         }
     }
+
+
 
 }
 

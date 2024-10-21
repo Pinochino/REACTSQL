@@ -10,7 +10,7 @@ function HomePage() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000")
+      .get("http://localhost:8000/product")
       .then((res) => {
         setData(res.data);
         setLoading(false);
@@ -24,7 +24,7 @@ function HomePage() {
 
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8000/delete/` + id)
+    axios.delete(`http://localhost:8000/product/delete/` + id)
     .then(res => {
       setData(prevData => prevData.filter(item => item.PRODUCT_ID !== id))
     })

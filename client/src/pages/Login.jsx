@@ -1,8 +1,9 @@
 import { useState } from "react";
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
 
 function Login() {
     const [inputs, setInputs] = useState({});
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const handleChange = (event) => {
@@ -11,17 +12,25 @@ function Login() {
         setInputs((values) => ({ ...values, [name]: value }));
     };
 
+    const navigate = useNavigate();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(inputs);
+        const API = `http://localhost:8000/customer/login`;
+        axios.post(API, inputs)
+        .then(data => {
+            console.log(data);
+            navigate('/')
+        })
+        .catch(error => {
+            console.error(error);
+            setError(error.message)
+        })
     };
 
-    if (loading) {
-        return (<h1>This website have been loading</h1>)
-    }
-
     if (error) {
-        return (<h1>This website have {error}</h1>)
+        return <h1>{error.message}</h1>
     }
 
     return (

@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const [inputs, setInputs] = useState({});
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,17 +30,17 @@ function Register() {
       .post("http://localhost:8000/customer/create", inputs)
       .then((res) => {
         console.log(res);
-        navigate("/");
+        navigate("/login");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.error(err);
+        setError(err.message)
+      });
   };
 
-  if (loading) {
-    return <h1>This website have been loading</h1>;
-  }
 
   if (error) {
-    return <h1>This website have {error}</h1>;
+    return <h1>This website have {error.message}</h1>;
   }
 
   return (
@@ -67,6 +66,7 @@ function Register() {
                 Choose file
               </label>
               <input
+                 name="avatar"
                 type="file"
                 className="form-control d-none"
                 id="customFile2"
